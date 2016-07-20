@@ -1,0 +1,29 @@
+%h1 Listing rooms
+
+%table
+  %thead
+    %tr
+      %th Name
+      %th Open at
+      %th Close at
+      %th price
+      %th Price unit
+      %th
+      %th
+      %th
+
+  %tbody
+    - @rooms.each do |room|
+      %tr
+        %td= room.name
+        %td= room.open_at.strftime("%R")
+        %td= room.close_at.strftime("%R")
+        %td= room.price
+        %td= room.price_unit
+        %td= link_to 'Show', room
+        %td= link_to 'Edit', edit_room_path(room)
+        %td= link_to 'Destroy', room, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Room', new_room_path
