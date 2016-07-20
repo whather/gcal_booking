@@ -7,4 +7,7 @@ Rails.application.routes.draw do
   end
 
   get '.well-known/acme-challenge/:id', to: "top#letsencrypt"
+
+  get 'oauth2callback', to: "googles#callback"
+  get 'google_authorize', to: "googles#authorize"
 end
