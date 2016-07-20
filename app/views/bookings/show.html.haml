@@ -1,0 +1,19 @@
+%p#notice= notice
+
+%p
+  %b Room:
+  %p
+    = @booking.room.id
+    = @booking.room.name
+    = @booking.room.open_at
+    = @booking.room.close_at
+%p
+  %b Start at:
+  = @booking.start_at
+%p
+  %b End at:
+  = @booking.end_at
+
+= link_to 'Edit', edit_room_booking_path(@booking)
+\|
+= link_to 'Back', room_bookings_path(@room)

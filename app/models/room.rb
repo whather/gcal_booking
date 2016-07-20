@@ -1,5 +1,6 @@
 class Room < ApplicationRecord
   belongs_to :user
+  has_many :bookings
 
   enum price_unit: %i(min hour day month year)
 
