@@ -5,4 +5,6 @@ Rails.application.routes.draw do
   resources :rooms do
     resources :bookings
   end
+
+  get '.well-known/acme-challenge/:id', to: "top#letsencrypt"
 end
