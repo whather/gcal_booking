@@ -5,6 +5,8 @@
 %p Close: #{@room.close_at.strftime("%R")}
 %p Price: #{@room.price} / #{@room.price_unit}
 
+= link_to 'Bookings', room_bookings_path(@room)
+
 = link_to 'Edit', edit_room_path(@room)
 \|
 = link_to 'Back', rooms_path

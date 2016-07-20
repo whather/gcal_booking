@@ -11,6 +11,8 @@
       %th
       %th
       %th
+      %th
+      %th
 
   %tbody
     - @rooms.each do |room|
@@ -23,6 +25,7 @@
         %td= link_to 'Show', room
         %td= link_to 'Edit', edit_room_path(room)
         %td= link_to 'Destroy', room, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td= link_to 'Bookings', room_bookings_path(room)
 
 %br
 
