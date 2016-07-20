@@ -1,2 +1,13 @@
-%h1 Top#index
-%p Find me in app/views/top/index.html.haml
+%h1 Top
+
+
+- if user_signed_in?
+  %p
+    = link_to "rooms", rooms_path
+  %p
+    = link_to "logout", destroy_user_session_path, method: :delete
+- else
+  %p
+    = link_to "sign in", new_user_session_path
+  %p
+    = link_to "sign up", new_user_registration_path
