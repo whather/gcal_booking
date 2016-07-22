@@ -15,3 +15,8 @@
 
 # Ignore Byebug command history file.
 .byebug_history
+
+/client_secret.json
+
+/.env
+/.env.*

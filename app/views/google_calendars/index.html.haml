@@ -1,0 +1,11 @@
+%h1 GoogleCalendars#index
+%p Find me in app/views/google_calendars/index.html.haml
+
+- @calendars.each do |c|
+  %h2= c.id
+  %p Summary: #{c.summary}
+  %p
+    description:
+    = simple_format c.description
+  %p Kind: #{c.kind}
+  %p Primary: #{c.primary}
