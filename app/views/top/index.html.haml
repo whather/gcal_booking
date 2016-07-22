@@ -6,6 +6,9 @@
   - unless current_user.refresh_token?
     %p
       = link_to "authorize google", google_authorize_path
+  - else
+    %p
+      = link_to "google calendars", google_calendars_path
   %p
     = link_to "logout", destroy_user_session_path, method: :delete
 - else

@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     resources :bookings
   end
 
+  resources :google_calendars, only: [:index]
+
   get '.well-known/acme-challenge/:id', to: "top#letsencrypt"
 
   get 'oauth2callback', to: "googles#callback"

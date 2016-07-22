@@ -6,17 +6,27 @@ class GoogleAuthorizer
   attr_reader :auth_client
 
   def initialize
-    client_secrets = Google::APIClient::ClientSecrets.load(CLIENT_SECRET_PATH)
-    @auth_client = client_secrets.to_authorization
+    @auth_client = load_auth_client
   end
 
   def authorize_uri
-    @authorize_uri ||=
-      begin
-        auth_client.update!(
-          scope: Google::Apis::CalendarV3::AUTH_CALENDAR,
-        )
-        auth_client.authorization_uri.to_s
-      end
+    auth_client.authorization_uri.to_s
+  end
+
+  def update_token!(user)
+    auth_client.update!(refresh_token: user.refresh_token)
+    auth_client.fetch_access_token!
+    user.update!(access_token: auth_client.access_token) # not necessary
+  end
+
+  private
+
+  def load_auth_client
+    client_secrets = Google::APIClient::ClientSecrets.load(CLIENT_SECRET_PATH)
+    client = client_secrets.to_authorization
+    client.update!(
+      scope: Google::Apis::CalendarV3::AUTH_CALENDAR,
+    )
+    client
   end
 end
