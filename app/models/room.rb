@@ -18,7 +18,7 @@ class Room < ApplicationRecord
     cal = GoogleCalendar.new(user, authorizer.auth_client)
     calendar_id = cal.calendar(calendar_id).id
     channel = cal.watch_events(calendar_id)
-    rooms.create!(
+    google_channels.create!(
       channel_id: channel.id,
       calendar_id: calendar_id,
       resource_id: channel.resource_id
