@@ -30,7 +30,7 @@ class GoogleCalendar
       type: 'web_hook',
     )
     channel = service.watch_event(calendar_id, my_channel, options)
-    logger.info channel.to_h
+    Rails.logger.info channel.to_h
     channel
   end
 
