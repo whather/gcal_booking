@@ -2,7 +2,7 @@ class GoogleChannelsController < ApplicationController
   # POST /rooms/:room_id/google_channels
   def create
     load_room
-    @room.sync(channel_params[:calendar_id])
+    @room.sync CGI.unescape(channel_params[:calendar_id])
 
     redirect_to @room
   end
