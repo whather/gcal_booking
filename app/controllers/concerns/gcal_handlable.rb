@@ -9,6 +9,10 @@ module GcalHandlable
     headers["X-Goog-Resource-ID"]
   end
 
+  def google_channel_id
+    headers["X-Goog-Channel-ID"]
+  end
+
   def google_expiration
     Time.parse(raw_google_expiration).localtime
   end
@@ -18,6 +22,7 @@ module GcalHandlable
     {
       resource_state: google_resource_state,
       resource_id:    google_resource_id,
+      channel_id:     google_channel_id,
       expired_at:     google_expiration,
     }
   end
