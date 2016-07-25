@@ -8,8 +8,8 @@ class GoogleCalendar
     @service = load_service(auth_client)
   end
 
-  def calendar_list
-    service.list_calendar_lists
+  def calendar_list(options = { min_access_role: 'writer' })
+    service.list_calendar_lists(options)
   end
 
   def calendar(calendar_id = user.email)
@@ -18,6 +18,20 @@ class GoogleCalendar
 
   def events(calendar_id = user.email)
     service.list_events(calendar_id)
+  end
+
+  # see
+  # https://github.com/google/google-api-ruby-client/blob/master/generated/google/apis/calendar_v3/service.rb#L1757
+  def watch_events(calendar_id = user.email, options = {})
+    channel_id = SecureRandom.uuid
+    my_channel = Google::Apis::CalendarV3::Channel.new(
+      id: channel_id,
+      address: "https://gcal-booking.herokuapp.com/google_calendars/callback",
+      type: 'web_hook',
+    )
+    channel = service.watch_event(calendar_id, my_channel, options)
+    logger.info channel.to_h
+    channel
   end
 
   private
