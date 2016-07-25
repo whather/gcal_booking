@@ -11,6 +11,7 @@ class RoomsController < ApplicationController
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    @calendars = calendar_list.items
   end
 
   # GET /rooms/new

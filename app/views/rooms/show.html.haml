@@ -5,6 +5,14 @@
 %p Close: #{@room.close_at.strftime("%R")}
 %p Price: #{@room.price} / #{@room.price_unit}
 
+- if current_user.refresh_token? && !@calendars.empty?
+  %p sync Ggoole Calendar booking plans
+  %ul
+    - @calendars.each do |c|
+      %li
+        = link_to c.summary, room_google_channels_path(@room, google_channel: { calendar_id: c.id }),
+            method: :post
+
 = link_to 'Bookings', room_bookings_path(@room)
 
 = link_to 'Edit', edit_room_path(@room)

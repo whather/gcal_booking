@@ -1,6 +1,6 @@
 class GoogleClientSecret
   cattr_reader :default_path do
-    Rails.root.join("client_secret")
+    Rails.root.join("client_secret.json")
   end
 
   def self.path

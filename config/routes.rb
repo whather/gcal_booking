@@ -4,9 +4,12 @@ Rails.application.routes.draw do
   devise_for :users
   resources :rooms do
     resources :bookings
+    resources :google_channels,  only: [:create]
   end
 
-  resources :google_calendars, only: [:index]
+  resources :google_calendars, only: [:index] do
+    get 'callback', on: :collection
+  end
 
   get '.well-known/acme-challenge/:id', to: "top#letsencrypt"
 
