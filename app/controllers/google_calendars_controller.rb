@@ -22,7 +22,11 @@ class GoogleCalendarsController < ApplicationController
     when "sync"
       cal = GoogleCalendar.new(user, ga.auth_client)
       events = cal.events(gc.calendar_id)
-      gs.update!(expired_at: google_expiration, next_sync_token: events.next_sync_token)
+      gc.update!(
+        expired_at: google_expiration,
+        next_sync_token: events.next_sync_token,
+        resource_id: google_resource_id,
+      )
       logger.info headers
       logger.info headers.to_h rescue nil
       logger.info params

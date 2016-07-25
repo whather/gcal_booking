@@ -3,5 +3,5 @@ class GoogleChannel < ApplicationRecord
 
   validates :channel_id,  presence: true, uniqueness: true
   validates :calendar_id, presence: true
-  validates :resource_id, presence: true
+  validates :resource_id, presence: true, on: :update
 end
