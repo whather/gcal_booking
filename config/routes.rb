@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   end
 
   resources :google_calendars, only: [:index] do
-    get 'callback', on: :collection
+    post 'callback', on: :collection
   end
 
   get '.well-known/acme-challenge/:id', to: "top#letsencrypt"
