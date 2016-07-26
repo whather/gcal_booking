@@ -15,12 +15,8 @@ class GoogleCalendarsController < ApplicationController
   # ignore `state` request
   def callback
     # TODO: pass the request to ActiveJob
-    # gc = GoogleChannel.find_by(channel_id: google_channel_id)
-    # user = gc.room.user
-    # ga = google_authorizer(user)
 
-    logger.info  "[INFO]  logging start for /google_calendars/callback"
-    logger.info  google_resource_state
+    logger.info  "[INFO] logging start for /google_calendars/callback: #{google_resource_state}"
 
     case google_resource_state
     when "exists"
@@ -30,28 +26,42 @@ class GoogleCalendarsController < ApplicationController
       # and create, update or delete event
       logger.info "exists callback"
 
-      # gc = GoogleChannel.find_by(channel_id: google_channel_id)
-      # user = gc.room.user
-      # ga = google_authorizer(user)
-      # cal = GoogleCalendar.new(user, ga.auth_client)
-      # events = cal.events(gc.calendar_id, sync_token: gc.next_sync_token)
-      # gc.update!(next_sync_token: events.next_sync_token)
-      # events.items.each do |e|
-      #   if created == updated
-      #     # create resource(alian_booking)
-      #   else
-      #     # update / delete
-      #   end
-      #   e.id # resource_id
-      #   e.start # e.original_start_time
-      #   e.end unless e.end_time_unspecified?
-      #   # e.status # confirmed, tentative, canceled
-      #   e.summary # title
-      #   e.recurrence # Array[String] parse, resolve and apply
-      #   e.recurring_event_id
-      #   e.created, e.updated
-      #   e.visibility # default, public, private, (confidential)
-      # end
+      load_google_channel
+
+      head :ok and return unless @google_channel
+
+      ga = google_authorizer(@user)
+      cal = GoogleCalendar.new(@user, ga.auth_client)
+      events = cal.events(@google_channel.calendar_id, sync_token: @google_channel.next_sync_token)
+      @google_channel.update!(next_sync_token: events.next_sync_token)
+
+      events.items.each do |e|
+        if e.created == e.updated
+          # create resource (company booking)
+          if !e.end_time_unspecified? && !@google_channel.room.bookings.in_between(e.start, e.end).exists?
+            @google_channel.room.bookings.create!(start_at: e.start, end_at: e.end, google_resource_id: e.id)
+          end
+        else
+          # update / delete
+          booking = @room.bookings.find_by(google_resource_id: e.id)
+          if booking
+            booking.update!(start_at: e.start, end_at: e.end)
+          else
+            if e.summary =~ /^【自社】/
+              # create company booking record
+            else
+              # delete the event
+            end
+          end
+        end
+        # e.id # resource_id
+        # # e.status # confirmed, tentative, canceled
+        # e.summary # title
+        # e.recurrence # Array[String] parse, resolve and apply
+        # e.recurring_event_id
+        # e.created, e.updated
+        # e.visibility # default, public, private, (confidential)
+      end
 
     when "not_exists"
       # stop watching
@@ -59,5 +69,13 @@ class GoogleCalendarsController < ApplicationController
     end
 
     head :ok
+  end
+
+  private
+
+  def load_google_channel
+    @google_channel = GoogleChannel.find_by(channel_id: google_channel_id)
+    @room = @google_channel.try(:room)
+    @user = @room.try(:user)
   end
 end

@@ -3,7 +3,13 @@ class Booking < ApplicationRecord
 
   validates :start_at, presence: true
   validates :end_at, presence: true
+  validates :google_resource_id, uniqueness: true
   validate :validate_time
+
+  scope :in_between, -> (start_at, end_at) {
+    where(end_at: [start_at..end_at])
+      .or(where(start_at: [start_at..end_at]))
+  }
 
   private
 

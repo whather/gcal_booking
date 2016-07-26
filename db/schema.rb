@@ -10,17 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160725113208) do
+ActiveRecord::Schema.define(version: 20160726091843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "bookings", force: :cascade do |t|
     t.integer  "room_id"
-    t.datetime "start_at",   null: false
-    t.datetime "end_at",     null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "start_at",           null: false
+    t.datetime "end_at",             null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.string   "google_resource_id"
+    t.index ["google_resource_id"], name: "index_bookings_on_google_resource_id", unique: true, using: :btree
     t.index ["room_id"], name: "index_bookings_on_room_id", using: :btree
   end
 
