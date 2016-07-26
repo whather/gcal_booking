@@ -22,16 +22,6 @@ class GoogleCalendarsController < ApplicationController
     logger.info  "[INFO]  logging start for /google_calendars/callback"
     logger.info  google_resource_state
 
-    logger.info "X-Goog-Resource-State: #{request.headers['X-Goog-Resource-State']}"
-    logger.info "X-GOOG-RESOURCE-STATE: #{request.headers['X-GOOG-RESOURCE-STATE']}"
-    logger.info "X_GOOG_RESOURCE_STATE: #{request.headers['X_GOOG_RESOURCE_STATE']}"
-
-    logger.info "Http-X-Goog-Resource-State: #{request.headers['Http-X-Goog-Resource-State']}"
-    logger.info "HTTP-X-GOOG-RESOURCE-STATE: #{request.headers['HTTP-X-GOOG-RESOURCE-STATE']}"
-    logger.info "HTTP_X_GOOG_RESOURCE_STATE: #{request.headers['HTTP_X_GOOG_RESOURCE_STATE']}"
-
-    request.headers.map { |k, v| k =~ /GOOG/ ? logger.info("#{k}: #{v}") : nil }
-
     case google_resource_state
     when "exists"
       # use next_sync_token
