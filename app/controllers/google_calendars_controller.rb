@@ -20,6 +20,7 @@ class GoogleCalendarsController < ApplicationController
 
     logger.info  "[INFO]  logging start for /google_calendars/callback"
     logger.info  google_resource_state
+    logger.info  headers.to_h
 
     case google_resource_state
     when "sync"
