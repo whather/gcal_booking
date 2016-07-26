@@ -28,7 +28,7 @@ class GoogleCalendarsController < ApplicationController
 
       load_google_channel
 
-      head :ok and return unless @google_channel
+      head :ok and return if @google_channel.nil? || @room.nil? || @user.nil?
 
       ga = google_authorizer(@user)
       cal = GoogleCalendar.new(@user, ga.auth_client)
