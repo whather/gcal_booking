@@ -22,8 +22,6 @@ class GoogleCalendarsController < ApplicationController
     logger.info  google_resource_state
     logger.info  request.try(:headers).try(:to_h)
     logger.info  response.try(:headers).try(:to_h)
-    logger.info  params
-    logger.info  params.try(:to_h)
 
     case google_resource_state
     when "sync"
