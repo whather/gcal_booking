@@ -38,14 +38,19 @@ class GoogleCalendarsController < ApplicationController
       events.items.each do |e|
         if e.created == e.updated
           # create resource (company booking)
-          if !e.end_time_unspecified? && !@google_channel.room.bookings.in_between(e.start, e.end).exists?
-            @google_channel.room.bookings.create!(start_at: e.start, end_at: e.end, google_resource_id: e.id)
+          if !e.end_time_unspecified? &&
+             !@google_channel.room.bookings.in_between(e.start.date_time, e.end.date_time).exists?
+            @google_channel.room.bookings.create!(
+              start_at: e.start.date_time,
+              end_at: e.end.date_time,
+              google_resource_id: e.id
+            )
           end
         else
           # update / delete
           booking = @room.bookings.find_by(google_resource_id: e.id)
           if booking
-            booking.update!(start_at: e.start, end_at: e.end)
+            booking.update!(start_at: e.start.date_time, end_at: e.end.date_time)
           else
             if e.summary =~ /^【自社】/
               # create company booking record
