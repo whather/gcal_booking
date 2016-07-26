@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160726091843) do
+ActiveRecord::Schema.define(version: 20160726102624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,13 +27,14 @@ ActiveRecord::Schema.define(version: 20160726091843) do
   end
 
   create_table "google_channels", force: :cascade do |t|
-    t.string   "channel_id",  default: "", null: false
-    t.integer  "room_id",                  null: false
-    t.string   "calendar_id", default: "", null: false
-    t.string   "resource_id", default: ""
+    t.string   "channel_id",      default: "", null: false
+    t.integer  "room_id",                      null: false
+    t.string   "calendar_id",     default: "", null: false
+    t.string   "resource_id",     default: ""
     t.datetime "expired_at"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.string   "next_sync_token"
     t.index ["channel_id"], name: "index_google_channels_on_channel_id", unique: true, using: :btree
     t.index ["room_id"], name: "index_google_channels_on_room_id", using: :btree
   end

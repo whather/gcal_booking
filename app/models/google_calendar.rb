@@ -16,8 +16,8 @@ class GoogleCalendar
     service.get_calendar_list(calendar_id)
   end
 
-  def events(calendar_id = user.email)
-    service.list_events(calendar_id)
+  def events(calendar_id = user.email, options = {})
+    service.list_events(calendar_id, options)
   end
 
   # see
