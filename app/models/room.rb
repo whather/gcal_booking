@@ -23,7 +23,7 @@ class Room < ApplicationRecord
       channel_id: channel.id,
       calendar_id: calendar_id,
       resource_id: channel.resource_id,
-      expired_at: channel.expiration,
+      expired_at: Time.zone.at(channel.expiration),
     )
   end
 
