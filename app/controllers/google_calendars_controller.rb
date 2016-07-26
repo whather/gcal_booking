@@ -75,7 +75,10 @@ class GoogleCalendarsController < ApplicationController
 
   def load_google_channel
     @google_channel = GoogleChannel.find_by(channel_id: google_channel_id)
-    @room = @google_channel.try(:room)
-    @user = @room.try(:user)
+
+    return unless @google_channel
+
+    @room = @google_channel.room
+    @user = @google_channel.room.user
   end
 end
