@@ -25,7 +25,7 @@ class Room < ApplicationRecord
     )
     gc.update!(
       channel_id: channel.id,
-      expired_at: Time.zone.at(channel.expiration.to_i),
+      expired_at: Time.zone.at(channel.expiration.to_i / 1000),
     )
   end
 
