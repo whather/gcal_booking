@@ -20,7 +20,7 @@ class GoogleCalendarsController < ApplicationController
 
     logger.info  "[INFO]  logging start for /google_calendars/callback"
     logger.info  google_resource_state
-    request.headers.map { |k, v| logger.info "#{k}: #{v}" }
+    request.headers.map { |k, v| k =~ /GOOG/ ? logger.info("#{k}: #{v}") : nil }
 
     case google_resource_state
     when "sync"
