@@ -14,19 +14,19 @@ class GoogleCalendarsController < ApplicationController
 
   def callback
     # TODO: pass the request to ActiveJob
-    gc = GoogleChannel.find_by(channel_id: google_channel_id)
-    user = gc.room.user
-    ga = google_authorizer(user)
+    # gc = GoogleChannel.find_by(channel_id: google_channel_id)
+    # user = gc.room.user
+    # ga = google_authorizer(user)
 
     case google_resource_state
     when "sync"
-      cal = GoogleCalendar.new(user, ga.auth_client)
-      events = cal.events(gc.calendar_id)
-      gc.update!(
-        expired_at: google_expiration,
-        next_sync_token: events.next_sync_token,
-        resource_id: google_resource_id,
-      )
+      # cal = GoogleCalendar.new(user, ga.auth_client)
+      # events = cal.events(gc.calendar_id)
+      # gc.update!(
+      #   expired_at: google_expiration,
+      #   next_sync_token: events.next_sync_token,
+      #   resource_id: google_resource_id,
+      # )
       logger.info headers
       logger.info headers.to_h rescue nil
       logger.info params

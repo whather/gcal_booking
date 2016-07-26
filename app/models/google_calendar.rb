@@ -22,7 +22,8 @@ class GoogleCalendar
 
   # see
   # https://github.com/google/google-api-ruby-client/blob/master/generated/google/apis/calendar_v3/service.rb#L1757
-  def watch_events(channel_id, calendar_id = user.email, options = {})
+  def watch_events(calendar_id = user.email, options = {})
+    channel_id = SecureRandom.uuid
     my_channel = Google::Apis::CalendarV3::Channel.new(
       id: channel_id,
       address: "https://gcal-booking.herokuapp.com/google_calendars/callback",

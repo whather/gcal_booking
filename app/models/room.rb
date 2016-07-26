@@ -14,15 +14,17 @@ class Room < ApplicationRecord
   validate :validate_opening_time
 
   # resource_id nil true
-  def sync(calendar_id = user.email)
+  def sync(calendar_id)
     # TODO: check user.refresh_token and raise error
     cal = GoogleCalendar.new(user, authorizer.auth_client)
-    channel_id = SecureRandom.uuid
+    channel = cal.watch_events(calendar_id)
+
     gc = google_channels.create!(
-      channel_id: channel_id,
+      channel_id: channel.id,
       calendar_id: calendar_id,
+      resource_id: channel.resource_id,
+      expired_at: channel.expiration,
     )
-    cal.watch_events(channel_id, calendar_id)
   end
 
   private
