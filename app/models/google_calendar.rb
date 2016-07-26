@@ -34,6 +34,14 @@ class GoogleCalendar
     channel
   end
 
+  def stop_channel(channel_id, resource_id)
+    channel = Google::Apis::CalendarV3::Channel.new(
+      id: channel_id,
+      resource_id: resource_id
+    )
+    service.stop_channel(channel)
+  end
+
   private
 
   def load_service(auth_client)
