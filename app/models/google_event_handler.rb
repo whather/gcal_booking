@@ -39,7 +39,7 @@ class GoogleEventHandler
 
     Rails.logger.info "deleted event"
     Rails.logger.info event.to_h
-    booking.destroy
+    booking.try(:destroy)
   end
 
   def valid_time_attributes?
