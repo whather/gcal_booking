@@ -19,10 +19,12 @@ class Room < ApplicationRecord
     cal = GoogleCalendar.new(user, authorizer.auth_client)
     channel = cal.watch_events(calendar_id)
 
-    gc = google_channels.create!(
-      channel_id: channel.id,
+    gc = google_channels.find_or_initialize_by(
       calendar_id: calendar_id,
       resource_id: channel.resource_id,
+    )
+    gc.update!(
+      channel_id: channel.id,
       expired_at: Time.zone.at(channel.expiration),
     )
   end
