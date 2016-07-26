@@ -51,6 +51,8 @@ class GoogleCalendarsController < ApplicationController
           booking = @room.bookings.find_by(google_resource_id: e.id)
           if booking
             if e.start.nil? || e.end.nil?
+              logger.info "deleted event"
+              logger.info e.to_h
               booking.destroy
             else
               booking.update!(start_at: e.start.date_time, end_at: e.end.date_time)
