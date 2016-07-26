@@ -50,7 +50,11 @@ class GoogleCalendarsController < ApplicationController
           # update / delete
           booking = @room.bookings.find_by(google_resource_id: e.id)
           if booking
-            booking.update!(start_at: e.start.date_time, end_at: e.end.date_time)
+            if e.start.nil? || e.end.nil?
+              booking.destroy
+            else
+              booking.update!(start_at: e.start.date_time, end_at: e.end.date_time)
+            end
           else
             if e.summary =~ /^【自社】/
               # create company booking record
