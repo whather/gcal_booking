@@ -18,10 +18,10 @@ class GoogleCalendarsController < ApplicationController
     # user = gc.room.user
     # ga = google_authorizer(user)
 
-    logger.debug   "[DEBUG] logging start for /google_calendars/callback"
-    logger.info    "[INFO]  logging start for /google_calendars/callback"
-    logger.warning "[WARN]  logging start for /google_calendars/callback"
-    logger.error   "[ERROR] logging start for /google_calendars/callback"
+    logger.debug "[DEBUG] logging start for /google_calendars/callback"
+    logger.info  "[INFO]  logging start for /google_calendars/callback"
+    logger.warn  "[WARN]  logging start for /google_calendars/callback"
+    logger.error "[ERROR] logging start for /google_calendars/callback"
 
     case google_resource_state
     when "sync"
