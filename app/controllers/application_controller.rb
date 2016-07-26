@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
     @google_authorizer ||=
       begin
         auth = GoogleAuthorizer.new
-        auth.update_token!(current_user)
+        auth.update_token!(user || current_user)
         auth
       end
   end
