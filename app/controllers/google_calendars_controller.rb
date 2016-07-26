@@ -20,14 +20,6 @@ class GoogleCalendarsController < ApplicationController
 
     case google_resource_state
     when "sync"
-      # cal = GoogleCalendar.new(user, ga.auth_client)
-      # events = cal.events(gc.calendar_id)
-      # gc.update!(
-      #   expired_at: google_expiration,
-      #   next_sync_token: events.next_sync_token,
-      #   resource_id: google_resource_id,
-      # )
-      logger.info headers
       logger.info headers.to_h rescue nil
       logger.info params
     when "exists"
@@ -35,8 +27,38 @@ class GoogleCalendarsController < ApplicationController
       # get event list
       # compare with bookings
       # and create, update or delete event
+      logger.info "exists callback"
+      logger.info headers.to_h rescue nil
+      logger.info params
+
+      # gc = GoogleChannel.find_by(channel_id: google_channel_id)
+      # user = gc.room.user
+      # ga = google_authorizer(user)
+      # cal = GoogleCalendar.new(user, ga.auth_client)
+      # events = cal.events(gc.calendar_id, sync_token: gc.next_sync_token)
+      # gc.update!(next_sync_token: events.next_sync_token)
+      # events.items.each do |e|
+      #   if created == updated
+      #     # create resource(alian_booking)
+      #   else
+      #     # update / delete
+      #   end
+      #   e.id # resource_id
+      #   e.start # e.original_start_time
+      #   e.end unless e.end_time_unspecified?
+      #   # e.status # confirmed, tentative, canceled
+      #   e.summary # title
+      #   e.recurrence # Array[String] parse, resolve and apply
+      #   e.recurring_event_id
+      #   e.created, e.updated
+      #   e.visibility # default, public, private, (confidential)
+      # end
+
     when "not_exists"
       # stop watching
+      logger.info "not_exists callback"
+      logger.info headers.to_h rescue nil
+      logger.info params
     end
 
     head :ok
