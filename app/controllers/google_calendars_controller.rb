@@ -12,6 +12,7 @@ class GoogleCalendarsController < ApplicationController
     @calendars = calendar_list.items
   end
 
+  # ignore `state` request
   def callback
     # TODO: pass the request to ActiveJob
     # gc = GoogleChannel.find_by(channel_id: google_channel_id)
@@ -23,17 +24,12 @@ class GoogleCalendarsController < ApplicationController
     request.headers.map { |k, v| k =~ /GOOG/ ? logger.info("#{k}: #{v}") : nil }
 
     case google_resource_state
-    when "sync"
-      logger.info headers.to_h rescue nil
-      logger.info params
     when "exists"
       # use next_sync_token
       # get event list
       # compare with bookings
       # and create, update or delete event
       logger.info "exists callback"
-      logger.info headers.to_h rescue nil
-      logger.info params
 
       # gc = GoogleChannel.find_by(channel_id: google_channel_id)
       # user = gc.room.user
@@ -61,8 +57,6 @@ class GoogleCalendarsController < ApplicationController
     when "not_exists"
       # stop watching
       logger.info "not_exists callback"
-      logger.info headers.to_h rescue nil
-      logger.info params
     end
 
     head :ok

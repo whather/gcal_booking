@@ -2,15 +2,15 @@ module GcalHandlable
   extend ActiveSupport::Concern
 
   def google_resource_state
-    headers["X-Goog-Resource-State"]
+    request.headers["HTTP_X_GOOG_RESOURCE_STATE"]
   end
 
   def google_resource_id
-    headers["X-Goog-Resource-ID"]
+    request.headers["HTTP_X_GOOG_RESOURCE_ID"]
   end
 
   def google_channel_id
-    headers["X-Goog-Channel-ID"]
+    request.headers["HTTP_X_GOOG_CHANNEL_ID"]
   end
 
   def google_expiration
@@ -30,6 +30,6 @@ module GcalHandlable
   private
 
   def raw_google_expiration
-    headers["X-Goog-Channel-Expiration"]
+    headers["HTTP_X_GOOG_CHANNEL_EXPIRATION"]
   end
 end
