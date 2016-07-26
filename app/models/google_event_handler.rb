@@ -19,6 +19,9 @@ class GoogleEventHandler
   end
 
   def call
+    Rails.logger.info "GoogleEventHandler#call"
+    Rails.logger.info event.to_h
+
     if (event.created == event.updated || booking.nil?) &&
        (valid_time_attributes? && !room.bookings.in_between(start_at, end_at).exists?)
       room.bookings.create!(
