@@ -1,55 +1,51 @@
 class GoogleEventHandler
-  attr_reader :event, :cb_handler
+  attr_reader :event, :cb_handler, :slashed_attrs
 
   delegate :channel, :room, to: :cb_handler
 
-  ## Google::Apis::CalendarV3::Event
-  # e.id                 # resource_id
-  # e.status             # confirmed, tentative, canceled
-  # e.summary            # title
-  # e.recurrence         # Array[String] parse, resolve and apply
-  # e.recurring_event_id
-  # e.created
-  # e.updated
-  # e.visibility         # default, public, private, (confidential)
-
-  def initialize(event, callback_handler)
-    @event = event
+  def initialize(event_item, callback_handler)
+    @event = event_item
     @cb_handler = callback_handler
+    @slashed_attrs = GoogleEventAttributes.new(@event).call
   end
 
   def call
     Rails.logger.info "GoogleEventHandler#call"
     Rails.logger.info event.to_h
 
-    if (event.created == event.updated || booking.nil?) &&
-       (valid_time_attributes? && !room.bookings.in_between(start_at, end_at).exists?)
+    # [{ start_at: start_at, end_at: end_at }]
+    if deleting?
+      Rails.logger.info "deleted event"
+      Rails.logger.info event.to_h
+      bookings.each { |b| b.try(:destroy!) }
+      return true
+    end
+
+    unless bookings.empty?
+      bookings.delete_all
+    end
+
+    slashed_attributes.each do |attr|
+      st = attr[:start_at]
+      ed = attr[:end_at]
+      next if room.bookings.in_between(st, ed).exists?
+
       room.bookings.create!(
-        start_at: start_at,
-        end_at: end_at,
+        start_at: st,
+        end_at: ed,
         google_resource_id: event.id
       )
-      return true
     end
-
-    if valid_time_attributes?
-      booking.update!(start_at: start_at, end_at: end_at)
-      return true
-    end
-
-    Rails.logger.info "deleted event"
-    Rails.logger.info event.to_h
-    booking.try(:destroy)
-  end
-
-  def valid_time_attributes?
-    !event.end_time_unspecified? && start_at && end_at
   end
 
   private
 
-  def booking
-    @booking ||= room.bookings.find_by(google_resource_id: event.id)
+  def bookings
+    @bookings ||= room.bookings.where(google_resource_id: event.id)
+  end
+
+  def deleting?
+    event.status == "canceled" && start_at.nil? && end_at.nil?
   end
 
   def start_at
