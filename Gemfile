@@ -34,6 +34,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'hamlit-rails'
 gem 'devise'
 gem 'google-api-client'
+gem 'ice_cube'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

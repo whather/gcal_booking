@@ -14,7 +14,7 @@ class GoogleCallbackHandler
   def call
     return unless valid?
 
-    events.items.each { |e| GoogleEventHandler.new(e, self).call }
+    events.items.each { |ei| GoogleEventHandler.new(ei, self).call }
   end
 
   private
