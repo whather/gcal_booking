@@ -45,7 +45,7 @@ class GoogleEventHandler
   end
 
   def deleting?
-    event.status == "canceled" && start_at.nil? && end_at.nil?
+    event.status == "canceled" || (start_at.nil? && end_at.nil?)
   end
 
   def start_at
