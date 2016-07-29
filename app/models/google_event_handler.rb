@@ -25,7 +25,7 @@ class GoogleEventHandler
       bookings.delete_all
     end
 
-    slashed_attributes.each do |attr|
+    slashed_attrs.each do |attr|
       st = attr[:start_at]
       ed = attr[:end_at]
       next if room.bookings.in_between(st, ed).exists?
